@@ -45,27 +45,28 @@ function App() {
   }, []);
 
   const capturePhoto = () => {
-    if (stream) {
-      const canvas = document.createElement("canvas");
-      canvas.width = 300;
-      canvas.height = 300;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(myVideo.current, 0, 0, canvas.width, canvas.height);
-      const dataURI = canvas.toDataURL("image/png");
-      setCapturedPhoto(dataURI);
-    }
+	if (stream) {
+	  const canvas = document.createElement("canvas");
+	  canvas.width = 300;
+	  canvas.height = 300;
+	  const ctx = canvas.getContext("2d");
+	  ctx.drawImage(myVideo.current, 0, 0, canvas.width, canvas.height);
+	  const dataURI = canvas.toDataURL("image/png");
+  
+	  // Trigger automatic download
+	  const link = document.createElement("a");
+	  link.href = dataURI;
+	  link.download = "captured_photo.png";
+	  document.body.appendChild(link);
+	  link.click();
+	  document.body.removeChild(link);
+  
+	  // Set the captured photo in state
+	  setCapturedPhoto(dataURI);
+	}
   };
+  
 
-  const downloadPhoto = () => {
-    if (capturedPhoto) {
-      const link = document.createElement("a");
-      link.href = capturedPhoto;
-      link.download = "captured_photo.png";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  };
   const callUser = (id) => {
     const peer = new Peer({
       initiator: true,
@@ -201,10 +202,6 @@ function App() {
       <div className="capture-button">
         <Button variant="contained" color="primary" onClick={capturePhoto}>
           Capture Photo
-        </Button>
-        {/* Button to download photo */}
-        <Button variant="contained" color="primary" onClick={downloadPhoto}>
-          Download Photo
         </Button>
       </div>
       </div>
