@@ -56,6 +56,16 @@ function App() {
     }
   };
 
+  const downloadPhoto = () => {
+    if (capturedPhoto) {
+      const link = document.createElement("a");
+      link.href = capturedPhoto;
+      link.download = "captured_photo.png";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
   const callUser = (id) => {
     const peer = new Peer({
       initiator: true,
@@ -186,12 +196,17 @@ function App() {
             <img src={capturedPhoto} alt="Captured" />
           </div>
         )}
-        {/* Button to capture photo */}
-        <div className="capture-button">
-          <Button variant="contained" color="primary" onClick={capturePhoto}>
-            Capture Photo
-          </Button>
-        </div>
+
+		   
+      <div className="capture-button">
+        <Button variant="contained" color="primary" onClick={capturePhoto}>
+          Capture Photo
+        </Button>
+        {/* Button to download photo */}
+        <Button variant="contained" color="primary" onClick={downloadPhoto}>
+          Download Photo
+        </Button>
+      </div>
       </div>
     </>
   );
